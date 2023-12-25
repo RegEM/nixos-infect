@@ -34,7 +34,7 @@ makeConf() {
     $network_import
     $NIXOS_IMPORT
   ];
-  public_hostname=$(curl -fsSL http://169.254.169.254/latest/meta_data/public_hostname);
+  until public_hostname=$(curl --output /dev/null --silent --head --fail http://169.254.169.254/latest/meta_data/public_hostname); do printf '.' sleep 5 done
   boot.cleanTmpDir = true;
   zramSwap.enable = ${zramswap};
   networking.hostName = ${public_hostname%%.*};
